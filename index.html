@@ -3,256 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhà Hàng Từ Vựng - Em Học Tiếng Anh</title>
+    <title>English Pronunciation Checker (US Accent)</title>
     <style>
-        /* Toàn bộ bối cảnh quán ăn: Tường gạch ấm cúng và sàn gỗ công nghiệp */
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #13c2c2;
+            --success: #52c41a;
+            --warning: #faad14;
+            --danger: #f5222d;
+            --dark: #262626;
+            --light: #f0f2f5;
+        }
+
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
             margin: 0;
-            padding: 0;
-            min-height: 100vh;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-            background: 
-                linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
-                linear-gradient(to bottom, #8d6e63 0%, #4e342e 60%, #3e2723 100%); /* Màu tường gỗ ấm */
-            background-size: cover;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* Tạo hiệu ứng sàn quán ăn ở phía dưới đáy màn hình */
-        body::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 15vh;
-            background: repeating-linear-gradient(90deg, #b5835a, #b5835a 40px, #a06e46 40px, #a06e46 80px);
-            z-index: 1;
-            border-top: 5px solid #5c3818;
-        }
-
-        /* Khung chính của trò chơi - Quầy order tại nhà hàng */
-        .restaurant-table {
-            background-color: #fffde7; /* Màu kem nhạt */
-            border: 15px solid #d84315; /* Khung viền màu cam gạch bắt mắt */
-            border-radius: 25px;
-            padding: 25px;
-            width: 90%;
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            width: 100%;
             max-width: 600px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             text-align: center;
-            z-index: 2; /* Nằm trên sàn nhà */
-            position: relative;
         }
 
-        /* Bảng phấn thông báo gọi món của Khách hàng */
-        .customer-order {
-            background-color: #1e272c; /* Màu bảng đen */
-            color: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            border: 5px solid #fbc02d; /* Viền vàng hoàng gia */
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #8c8c8c;
             margin-bottom: 25px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            font-size: 14px;
         }
 
-        .customer-title {
+        .card {
+            background: #fafafa;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-size: 20px;
-            color: #ffeb3b;
-            margin: 0 0 10px 0;
+            font-weight: 600;
+            color: var(--primary);
         }
 
-        /* Gợi ý siêu đơn giản cho bé */
-        .clue-text {
-            font-size: 26px;
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: bold;
-            line-height: 1.4;
-            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav {
+            background-color: #e8e8e8;
+            color: var(--dark);
+        }
+
+        .btn-nav:hover {
+            background-color: #d9d9d9;
+        }
+
+        .btn-action {
+            background-color: var(--primary);
+            color: white;
+            font-size: 18px;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(74, 111, 165, 0.3);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(74, 111, 165, 0.4);
+        }
+
+        .btn-listen {
+            background-color: var(--secondary);
+            color: white;
+            margin-right: 10px;
+        }
+
+        .recording {
+            background-color: var(--danger) !important;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: 800;
             margin: 10px 0;
         }
 
-        .translation-hint {
-            font-size: 16px;
-            color: #b0bec5;
+        .transcript {
             font-style: italic;
+            color: #595959;
+            margin-top: 10px;
         }
 
-        /* Lưới chứa 4 đáp án (4 món ăn) */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        /* Nút đáp án hình đĩa thức ăn */
-        .food-option {
-            background-color: #ffffff;
-            border: 3px solid #ffb74d;
-            border-radius: 15px;
-            padding: 20px 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #e65100;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 5px 0 #ffb74d;
-        }
-
-        .food-option:hover {
-            background-color: #fff3e0;
-            transform: translateY(-2px);
-        }
-
-        .food-option:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #ffb74d;
-        }
-
-        /* Điểm số hình ngôi sao */
-        .score-box {
-            position: absolute;
-            top: -35px;
-            left: 20px;
-            background: #4caf50;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        /* Hiển thị kết quả đúng/sai */
         .feedback {
-            font-size: 22px;
             font-weight: bold;
-            min-height: 35px;
-            margin-top: 15px;
+            font-size: 18px;
         }
-        
-        .correct { color: #4caf50; }
-        .wrong { color: #f44336; }
     </style>
 </head>
 <body>
 
-    <div class="restaurant-table">
-        <!-- Điểm số của Bé -->
-        <div class="score-box">⭐ Điểm: <span id="score">0</span></div>
+<div class="container">
+    <h1>Phát Âm Tiếng Anh</h1>
+    <div class="subtitle">Sử dụng Google Speech Engine (Chuẩn giọng Mỹ en-US)</div>
 
-        <!-- Bảng gọi món của thực khách -->
-        <div class="customer-order">
-            <div class="customer-title">👤 Khách hàng nói:</div>
-            <div class="clue-text" id="clue">Đang chuẩn bị món ăn...</div>
-            <div class="translation-hint" id="hint"></div>
-        </div>
-
-        <!-- 4 Khay thức ăn tương ứng với 4 đáp án -->
-        <div class="menu-grid">
-            <button class="food-option" onclick="selectAnswer(0)" id="opt0">Option 1</button>
-            <button class="food-option" onclick="selectAnswer(1)" id="opt1">Option 2</button>
-            <button class="food-option" onclick="selectAnswer(2)" id="opt2">Option 3</button>
-            <button class="food-option" onclick="selectAnswer(3)" id="opt3">Option 4</button>
-        </div>
-
-        <!-- Thông báo đúng/sai sinh động -->
-        <div class="feedback" id="feedback"></div>
+    <div class="navigation">
+        <button class="btn-nav" id="prevBtn" onclick="changeSentence(-1)">◀ Câu trước</button>
+        <span id="progress" style="align-self: center; font-weight: bold;">1 / 5</span>
+        <button class="btn-nav" id="nextBtn" onclick="changeSentence(1)">Câu tiếp ▶</button>
     </div>
 
-    <script>
-        // Kho dữ liệu sạch dành riêng cho học sinh lớp 1 (Được tải qua API giả lập)
-        const childVocabularyAPI = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify([
-            { word: "Cat", clue: "A small animal. It says 'Meow'.", hint: "(Con vật nhỏ kêu Meow Meow)" },
-            { word: "Dog", clue: "A loyal pet. It says 'Woof Woof'.", hint: "(Thú cưng trong nhà sủa Gâu Gâu)" },
-            { word: "Sun", clue: "It is big and hot in the sky during the day.", hint: "(Ông mặt trời tỏa sáng ban ngày)" },
-            { word: "Fish", clue: "It lives and swims under the water.", hint: "(Con vật bơi lội dưới nước)" },
-            { word: "Ball", clue: "A round toy. You can kick or throw it.", hint: "(Đồ chơi hình tròn, bé dùng để đá hoặc ném)" },
-            { word: "Book", clue: "You open it to read stories and see pictures.", hint: "(Vật có nhiều trang để bé đọc và xem tranh)" },
-            { word: "Milk", clue: "A white drink that is very good for your bones.", hint: "(Thức uống màu trắng bổ dưỡng từ bò)" },
-            { word: "Apple", clue: "A sweet fruit. It can be red or green.", hint: "(Quả quả táo có màu đỏ hoặc xanh)" },
-            { word: "Bird", clue: "It has wings and can fly high in the sky.", hint: "(Con vật có cánh biết bay)" },
-            { word: "Frog", clue: "A green animal. It can jump very high.", hint: "(Con vật màu xanh biết nhảy chồm chồm)" },
-            { word: "Tree", clue: "It is tall, green, and grows outside.", hint: "(Cây xanh có lá to và cao)" },
-            { word: "Water", clue: "You drink this when you are thirsty.", hint: "(Nước tinh khiết bé uống khi khát)" }
-        ]));
+    <div class="card" id="targetSentence">Loading...</div>
 
-        let wordPool = [];
-        let currentQuestion = {};
-        let options = [];
-        let score = 0;
+    <div style="margin-top: 20px;">
+        <button class="btn-action btn-listen" onclick="speakSample()">🔊 Nghe mẫu</button>
+        <button class="btn-action" id="recordBtn" onclick="toggleRecording()">🎤 Bắt đầu nói</button>
+    </div>
 
-        // Gọi API lấy dữ liệu món ăn
-        async function loadRestaurantGame() {
-            try {
-                const response = await fetch(childVocabularyAPI);
-                wordPool = await response.json();
-                nextDish();
-            } catch (error) {
-                document.getElementById('clue').innerText = "Nhà hàng mất điện, vui lòng tải lại trang!";
-            }
+    <div class="result-box" id="resultBox">
+        <div class="feedback" id="feedbackText">Tuyệt vời!</div>
+        <div class="score" id="scoreNumber">0%</div>
+        <div class="transcript">Bạn đã nói: "<span id="userSpeech">...</span>"</div>
+    </div>
+</div>
+
+<script>
+    // Danh sách các câu mẫu để luyện tập phát âm từ dễ đến khó
+    const sentences = [
+        "Hello, how are you doing today?",
+        "The quick brown fox jumps over the lazy dog.",
+        "Practice makes perfect, so keep trying every day.",
+        "Beautiful weather we are having this morning.",
+        "What time do you think you will arrive at the station?",
+        "Success is not final, failure is not fatal.",
+        "Peter Piper picked a peck of pickled peppers."
+    ];
+
+    let currentIndex = 0;
+    let isRecording = false;
+    let recognition;
+
+    const targetSentenceEl = document.getElementById('targetSentence');
+    const progressEl = document.getElementById('progress');
+    const recordBtn = document.getElementById('recordBtn');
+    const resultBox = document.getElementById('resultBox');
+    const feedbackText = document.getElementById('feedbackText');
+    const scoreNumber = document.getElementById('scoreNumber');
+    const userSpeechEl = document.getElementById('userSpeech');
+
+    // Khởi tạo ứng dụng
+    function initApp() {
+        // Cập nhật câu hiện tại
+        targetSentenceEl.innerText = sentences[currentIndex];
+        progressEl.innerText = `${currentIndex + 1} / ${sentences.length}`;
+        resultBox.style.display = 'none';
+        
+        // Khởi tạo Speech Recognition
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Trình duyệt của bạn không hỗ trợ nhận diện giọng nói. Vui lòng sử dụng Google Chrome hoặc Microsoft Edge.");
+            return;
         }
 
-        // Chuyển sang món ăn/câu hỏi tiếp theo
-        function nextDish() {
-            document.getElementById('feedback').innerText = "";
-            document.getElementById('feedback').className = "feedback";
-            
-            // Chọn ngẫu nhiên 1 từ làm đáp án đúng
-            const randomIndex = Math.floor(Math.random() * wordPool.length);
-            currentQuestion = wordPool[randomIndex];
+        recognition = new SpeechRecognition();
+        recognition.lang = 'en-US'; // Thiết lập nhận diện chuẩn giọng Mỹ
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
 
-            // Tạo danh sách 4 đáp án (1 đúng, 3 sai)
-            options = [currentQuestion.word];
-            
-            // Lấy thêm 3 từ khác không trùng lặp để làm mồi nhử
-            while(options.length < 4) {
-                const wrongWord = wordPool[Math.floor(Math.random() * wordPool.length)].word;
-                if(!options.includes(wrongWord)) {
-                    options.push(wrongWord);
-                }
+        // Xử lý khi có kết quả trả về từ Google
+        recognition.onresult = (event) => {
+            const result = event.results[0][0];
+            const transcript = result.transcript;
+            const confidence = result.confidence; // Độ tự tin của Google (từ 0 đến 1)
+
+            calculateScore(transcript, confidence);
+        };
+
+        recognition.onerror = (event) => {
+            console.error(event.error);
+            stopRecordingState();
+            if(event.error === 'not-allowed') {
+                alert('Vui lòng cấp quyền truy cập Microphone để ứng dụng hoạt động.');
             }
+        };
 
-            // Trộn đều thứ tự 4 đáp án
-            options.sort(() => Math.random() - 0.5);
+        recognition.onend = () => {
+            stopRecordingState();
+        };
+    }
 
-            // Hiển thị lên giao diện
-            document.getElementById('clue').innerText = currentQuestion.clue;
-            document.getElementById('hint').innerText = currentQuestion.hint;
+    // Chuyển đổi câu hỏi
+    function changeSentence(direction) {
+        currentIndex += direction;
+        if (currentIndex < 0) currentIndex = sentences.length - 1;
+        if (currentIndex >= sentences.length) currentIndex = 0;
+        initApp();
+    }
+
+    // Nghe phát âm mẫu (Sử dụng Web Speech Synthesis chuẩn Mỹ)
+    function speakSample() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Dừng các phát âm cũ nếu có
+            const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
+            utterance.lang = 'en-US'; // Giọng Mỹ
             
-            for(let i = 0; i < 4; i++) {
-                document.getElementById(`opt${i}`).innerText = options[i];
-                document.getElementById(`opt${i}`).disabled = false;
-            }
+            // Tìm giọng đọc tiếng Anh Mỹ tự nhiên nếu có sẵn trên máy
+            const voices = window.speechSynthesis.getVoices();
+            const usVoice = voices.find(voice => voice.lang === 'en-US' || voice.lang === 'en_US');
+            if (usVoice) utterance.voice = usVoice;
+
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert("Trình duyệt không hỗ trợ tính năng phát âm mẫu.");
         }
+    }
 
-        // Xử lý khi bé bấm chọn món ăn
-        function selectAnswer(selectedIndex) {
-            const chosenWord = options[selectedIndex];
-            const feedbackEl = document.getElementById('feedback');
-
-            // Khóa các nút lại không cho bấm liên tục
-            for(let i = 0; i < 4; i++) document.getElementById(`opt${i}`).disabled = true;
-
-            if(chosenWord === currentQuestion.word) {
-                score += 10;
-                document.getElementById('score').innerText = score;
-                feedbackEl.innerText = "🎉 Chính xác! Khách hàng rất thích món này! 🥰";
-                feedbackEl.className = "feedback correct";
-            } else {
-                feedbackEl.innerText = `😢 Ôi nhầm rồi! Món đúng phải là "${currentQuestion.word}".`;
-                feedbackEl.className = "feedback wrong";
-            }
-
-            // Chờ 2.5 giây để bé kịp nhìn đáp án trước khi đổi khách hàng mới
-            setTimeout(nextDish, 2500);
+    // Bật/Tắt ghi âm
+    function toggleRecording() {
+        if (!recognition) return;
+        
+        if (isRecording) {
+            recognition.stop();
+            stopRecordingState();
+        } else {
+            resultBox.style.display = 'none';
+            recognition.start();
+            isRecording = true;
+            recordBtn.innerText = "🛑 Đang nghe... Nói đi";
+            recordBtn.classList.add('recording');
         }
+    }
 
-        // Chạy game khi mở trang web lên
-        window.onload = loadRestaurantGame;
-    </script>
+    function stopRecordingState() {
+        isRecording = false;
+        recordBtn.innerText = "🎤 Bắt đầu nói";
+        recordBtn.classList.remove('recording');
+    }
+
+    // Thuật toán chuẩn hóa chuỗi để so sánh văn bản
+    function cleanText(text) {
+        return text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").trim();
+    }
+
+    // Tính toán điểm số dựa trên văn bản nhận diện và độ tự tin của Google
+    function calculateScore(userText, confidence) {
+        const targetText = sentences[currentIndex];
+        const cleanTarget = cleanText(targetText);
+        const cleanUser = cleanText(userText);
+
+        userSpeechEl.innerText = userText;
+        resultBox.style.display = 'block';
+
+        // 1. So sánh độ trùng khớp từ ngữ cơ bản
+        const targetWords = cleanTarget.split(' ');
+        const userWords = cleanUser.split(' ');
+        
+        let matchedWords = 0;
+        targetWords.forEach(word => {
+            if (userWords.includes(word)) {
+                matchedWords++;
+            }
+        });
+
+        const wordMatchRatio = matchedWords / targetWords.length;
+
+        // 2. Tính điểm tổng hợp (Kết hợp độ chính xác từ ngữ và độ tự tin âm học của Google)
+        // Nếu nói đúng từ nhưng phát âm hơi lệch, điểm confidence của Google sẽ thấp xuống.
+        let finalScore = (wordMatchRatio * 0.6) + (confidence * 0.4);
+        
+        // Chuyển sang thang điểm 100%
+        let displayScore = Math.round(finalScore * 100);
+        
+        // Giới hạn nếu người dùng nói quá hoàn hảo hoặc lệch quá nhiều từ
+        if (cleanTarget === cleanUser && displayScore < 90) displayScore = 95;
+        if (wordMatchRatio === 0) displayScore = 0;
+
+        scoreNumber.innerText = displayScore + "%";
+
+        // Gợi ý nhận xét dựa trên điểm số
+        if (displayScore >= 85) {
+            feedbackText.innerText = "🌟 Tuyệt vời! Phát âm chuẩn Mỹ!";
+            feedbackText.style.color = 'var(--success)';
+            resultBox.style.backgroundColor = '#f6ffed';
+            resultBox.style.border = '1px solid #b7eb8f';
+        } else if (displayScore >= 60) {
+            feedbackText.innerText = "👍 Khá tốt! Cần chú ý nhấn nhá thêm.";
+            feedbackText.style.color = 'var(--warning)';
+            resultBox.style.backgroundColor = '#fffbe6';
+            resultBox.style.border = '1px solid #ffe58f';
+        } else {
+            feedbackText.innerText = "❌ Chưa chính xác! Hãy nghe mẫu và thử lại nhé.";
+            feedbackText.style.color = 'var(--danger)';
+            resultBox.style.backgroundColor = '#fff1f0';
+            resultBox.style.border = '1px solid #ffa39e';
+        }
+    }
+
+    // Chạy ứng dụng khi load xong trang
+    window.onload = () => {
+        initApp();
+        // Nạp danh sách giọng nói cho phần Phát âm mẫu (hỗ trợ bất đồng bộ trên một số trình duyệt)
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {};
+        }
+    };
+</script>
+
 </body>
 </html>
