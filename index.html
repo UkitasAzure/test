@@ -3,321 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Word Diner - Học Từ Vựng Tiếng Anh</title>
+    <title>Nhà Hàng Từ Vựng Tiếng Anh</title>
     <style>
-        :root {
-            --primary-color: #e67e22;
-            --secondary-color: #2c3e50;
-            --bg-color: #f5f6fa;
-            --card-color: #ffffff;
-        }
-
+        /* Tạo background bối cảnh quán ăn với khăn trải bàn sọc caro đỏ/trắng */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            background: 
+                repeating-linear-gradient(45deg, #ff9999 25%, transparent 25%, transparent 75%, #ff9999 75%, #ff9999),
+                repeating-linear-gradient(45deg, #ff9999 25%, white 25%, white 75%, #ff9999 75%, #ff9999);
+            background-position: 0 0, 20px 20px;
+            background-size: 40px 40px;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
             margin: 0;
-            padding: 20px;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
 
-        .game-container {
-            background-color: var(--card-color);
+        /* Tấm bảng order bằng gỗ */
+        .restaurant-board {
+            background-color: #fff8e7; /* Màu giấy thực đơn */
+            border: 12px solid #8b4513; /* Khung gỗ */
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 30px;
-            width: 100%;
-            max-width: 600px;
+            padding: 30px 40px;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
             text-align: center;
-            border: 4px solid var(--primary-color);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
         }
 
-        h1 {
-            color: var(--primary-color);
-            margin-top: 0;
-            font-size: 2.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        /* Biểu tượng đầu bếp */
+        .chef {
+            font-size: 80px;
+            margin-top: -80px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
         }
 
-        .dashboard {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            color: var(--secondary-color);
+        h2 {
+            color: #d32f2f;
+            margin-bottom: 5px;
         }
 
-        .diner-scene {
-            background: #ffeaa7;
+        p {
+            color: #555;
+            font-size: 18px;
+        }
+
+        /* Đĩa đựng chữ cái bị đảo lộn */
+        .word-plate {
+            font-size: 45px;
+            letter-spacing: 15px;
+            margin: 25px 0;
             padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-left: 5px solid #fdcb6e;
+            background: #ffffff;
+            border: 4px dashed #ccc;
+            border-radius: 50px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+            color: #1976d2;
+            font-weight: bold;
         }
 
-        .guest-bubble {
-            font-size: 1.1rem;
-            color: #2d3436;
-            font-style: italic;
-            line-height: 1.5;
-        }
-
-        .part-of-speech {
-            display: inline-block;
-            background: var(--secondary-color);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            text-transform: uppercase;
-        }
-
-        .input-area {
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
+        /* Ô nhập liệu cho bé */
+        input {
+            font-size: 28px;
+            padding: 10px;
             width: 80%;
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-            outline: none;
+            border: 4px solid #ffb74d;
+            border-radius: 12px;
             text-align: center;
-            transition: border-color 0.3s;
+            text-transform: lowercase; /* Tự động hiển thị chữ thường */
+            outline: none;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--primary-color);
+        input:focus {
+            border-color: #ff9800;
         }
 
+        /* Các nút bấm */
         .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+            margin-top: 20px;
         }
 
         button {
+            font-size: 20px;
             padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: bold;
+            color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.95); /* Hiệu ứng nhấn nút */
         }
 
-        .btn-serve {
-            background-color: var(--primary-color);
-            color: white;
-        }
+        .btn-serve { background-color: #4CAF50; margin-right: 10px;}
+        .btn-serve:hover { background-color: #45a049; }
 
-        .btn-skip {
-            background-color: #7f8c8d;
-            color: white;
-        }
+        .btn-skip { background-color: #2196F3; }
+        .btn-skip:hover { background-color: #1976D2; }
 
+        /* Thông báo và điểm số */
         .message {
+            font-size: 22px;
             margin-top: 20px;
-            font-size: 1.1rem;
             font-weight: bold;
-            min-height: 25px;
+            min-height: 30px;
         }
 
-        .success { color: #2ecc71; }
-        .error { color: #e74c3c; }
-        .loading { color: #7f8c8d; font-style: italic; }
-
-        .hidden-word {
-            letter-spacing: 5px;
-            font-size: 1.5rem;
+        .score-board {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: #d32f2f;
             font-weight: bold;
-            color: var(--secondary-color);
-            margin: 15px 0;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 15px;
+            border-radius: 20px;
         }
     </style>
 </head>
 <body>
 
-<div class="game-container">
-    <h1>🍽️ The Word Diner</h1>
-    <p style="color: #7f8c8d; margin-bottom: 20px;">Đoán từ vững tiếng Anh để phục vụ thực khách!</p>
+    <div class="restaurant-board">
+        <div class="score-board">⭐ <span id="scoreVal">0</span></div>
+        <div class="chef">👨‍🍳</div>
+        <h2>Bếp Trưởng Cần Giúp!</h2>
+        <p>Phiếu gọi món bị đảo lộn chữ cái. Bé hãy sắp xếp lại để phục vụ khách nhé!</p>
 
-    <div class="dashboard">
-        <div>Điểm: <span id="score">0</span> 🌟</div>
-        <div>Chuỗi thắng: <span id="streak">0</span> 🔥</div>
-    </div>
+        <div class="word-plate" id="scrambledWord">...</div>
 
-    <div class="diner-scene">
-        <div id="loader" class="loading">Một thực khách mới đang vào quán... 🚶‍♂️</div>
-        <div id="game-content" style="display: none;">
-            <div class="guest-bubble" id="definition">"I want something..."</div>
-            <span class="part-of-speech" id="partOfSpeech">Noun</span>
-            <div class="hidden-word" id="wordHint">_ _ _ _</div>
+        <input type="text" id="userInput" placeholder="Nhập từ đúng..." autocomplete="off">
+        
+        <div class="btn-group">
+            <button class="btn-serve" onclick="checkAnswer()">Phục Vụ 🍽️</button>
+            <button class="btn-skip" onclick="fetchWord()">Đổi Món ⏭️</button>
         </div>
+
+        <div class="message" id="message"></div>
     </div>
 
-    <div class="input-area">
-        <input type="text" id="guestInput" placeholder="Nhập từ tiếng Anh tại đây..." autocomplete="off" disabled>
-    </div>
+    <script>
+        let currentWord = "";
+        let score = 0;
 
-    <div class="btn-group">
-        <button class="btn-serve" id="serveBtn" onclick="checkAnswer()" disabled>Phục vụ! 🛎️</button>
-        <button class="btn-skip" id="skipBtn" onclick="skipWord()" disabled>Đổi khách 🔄</button>
-    </div>
+        // Hàm gọi API để lấy từ tiếng Anh ngẫu nhiên
+        async function fetchWord() {
+            const wordPlate = document.getElementById("scrambledWord");
+            const messageEl = document.getElementById("message");
+            const inputEl = document.getElementById("userInput");
 
-    <div class="message" id="message"></div>
-</div>
+            wordPlate.innerText = "Đang nấu...";
+            messageEl.innerText = "";
+            inputEl.value = "";
+            inputEl.focus();
 
-<script>
-    // Danh sách các từ thông dụng để game chọn ngẫu nhiên giải nghĩa từ API
-    // (Vì API không có chức năng lấy từ ngẫu nhiên tốt, nên ta tự tạo kho từ để gọi API)
-    const wordBank = [
-        "apple", "banana", "coffee", "dinner", "kitchen", "family", "journey", "window", 
-        "market", "friend", "teacher", "student", "doctor", "hospital", "library", "animal",
-        "picture", "garden", "player", "weather", "summer", "winter", "morning", "guitar",
-        "shadow", "forest", "palace", "island", "bridge", "village", "camera", "jacket"
-    ];
+            try {
+                // Sử dụng Datamuse API: Tìm các từ phổ biến có 3 hoặc 4 chữ cái (phù hợp lớp 1)
+                const lengths = ["???", "????"]; 
+                const randomLength = lengths[Math.floor(Math.random() * lengths.length)];
+                
+                // Fetch 100 từ phổ biến nhất có độ dài tương ứng
+                const response = await fetch(`https://api.datamuse.com/words?sp=${randomLength}&max=100`);
+                const data = await response.json();
 
-    let currentWord = "";
-    let score = 0;
-    let streak = 0;
+                // Chọn ngẫu nhiên 1 từ trong danh sách
+                const randomIndex = Math.floor(Math.random() * data.length);
+                currentWord = data[randomIndex].word.toLowerCase();
 
-    const loader = document.getElementById("loader");
-    const gameContent = document.getElementById("game-content");
-    const definitionEl = document.getElementById("definition");
-    const partOfSpeechEl = document.getElementById("partOfSpeech");
-    const wordHintEl = document.getElementById("wordHint");
-    const guestInput = document.getElementById("guestInput");
-    const serveBtn = document.getElementById("serveBtn");
-    const skipBtn = document.getElementById("skipBtn");
-    const messageEl = document.getElementById("message");
-    const scoreEl = document.getElementById("score");
-    const streakEl = document.getElementById("streak");
+                // Thuật toán đảo lộn chữ cái (Scramble)
+                let scrambled = scrambleWord(currentWord);
+                
+                // Đảm bảo từ đảo lộn không vô tình trùng với từ gốc
+                while(scrambled === currentWord && currentWord.length > 1) {
+                    scrambled = scrambleWord(currentWord);
+                }
 
-    // Khởi động game
-    getNewCustomer();
-
-    // Lắng nghe phím Enter
-    guestInput.addEventListener("keyup", function(event) {
-        if (event.key === "Enter" && !serveBtn.disabled) {
-            checkAnswer();
-        }
-    });
-
-    // Hàm lấy một từ ngẫu nhiên và gọi API dữ liệu
-    async function getNewCustomer() {
-        // Reset giao diện hiển thị tải
-        loader.style.display = "block";
-        gameContent.style.display = "none";
-        messageEl.textContent = "";
-        guestInput.value = "";
-        setControlsDisabled(true);
-
-        // Lấy ngẫu nhiên 1 từ trong kho từ
-        const randomWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-        
-        try {
-            // Sử dụng Free Dictionary API công khai
-            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${randomWord}`);
-            if (!response.ok) throw new Error("Không thể tải từ vựng");
-            
-            const data = await response.json();
-            
-            // Phân tích dữ liệu nhận từ API
-            currentWord = data[0].word.toLowerCase();
-            const meanings = data[0].meanings[0];
-            const partOfSpeech = meanings.partOfSpeech;
-            const definition = meanings.definitions[0].definition;
-
-            // Hiển thị lên giao diện quán ăn
-            definitionEl.textContent = `Thực khách nói: "Tôi muốn một từ có nghĩa là: ${definition}"`;
-            partOfSpeechEl.textContent = partOfSpeech;
-            
-            // Tạo gợi ý dạng dấu gạch dưới (_ _ _ _)
-            wordHintEl.textContent = currentWord.replace(/[a-zA-Z]/g, "_ ");
-
-            // Hiển thị nội dung game
-            loader.style.display = "none";
-            gameContent.style.display = "block";
-            setControlsDisabled(false);
-            guestInput.focus();
-
-        } catch (error) {
-            console.error(error);
-            // Nếu lỗi (mạng/API nghẽn), tự động thử lại từ khác
-            getNewCustomer();
-        }
-    }
-
-    // Hàm kiểm tra đáp án của người chơi
-    function checkAnswer() {
-        const userAns = guestInput.value.trim().toLowerCase();
-        
-        if (userAns === "") {
-            showMessage("Vui lòng nhập món ăn (từ vựng) vào hóa đơn!", "error");
-            return;
+                // Hiển thị lên đĩa chữ IN HOA cho bé dễ nhìn
+                wordPlate.innerText = scrambled.toUpperCase();
+            } catch (error) {
+                console.error("Lỗi API:", error);
+                wordPlate.innerText = "LỖI";
+                messageEl.innerText = "Không thể tải từ. Vui lòng kiểm tra mạng!";
+                messageEl.style.color = "red";
+            }
         }
 
-        if (userAns === currentWord) {
-            score += 10;
-            streak += 1;
-            showMessage(`🎉 Chính xác! Bạn đã phục vụ món "${currentWord.toUpperCase()}" thành công! (+10đ)`, "success");
-            updateDashboard();
-            setControlsDisabled(true);
-            // Đợi 2 giây rồi qua từ mới
-            setTimeout(getNewCustomer, 2000);
-        } else {
-            streak = 0; // Mất chuỗi thắng
-            showMessage("❌ Sai món rồi! Thực khách không hài lòng. Hãy thử lại!", "error");
-            updateDashboard();
+        // Hàm xáo trộn chuỗi
+        function scrambleWord(word) {
+            return word.split('').sort(() => 0.5 - Math.random()).join('');
         }
-    }
 
-    // Hàm bỏ qua từ hiện tại
-    function skipWord() {
-        streak = 0;
-        updateDashboard();
-        showMessage(`Khách đã bỏ đi! Đáp án đúng là: ${currentWord.toUpperCase()}`, "error");
-        setControlsDisabled(true);
-        setTimeout(getNewCustomer, 2000);
-    }
+        // Hàm kiểm tra đáp án của bé
+        function checkAnswer() {
+            const userGuess = document.getElementById("userInput").value.toLowerCase().trim();
+            const messageEl = document.getElementById("message");
 
-    // Cập nhật điểm số giao diện
-    function updateDashboard() {
-        scoreEl.textContent = score;
-        streakEl.textContent = streak;
-    }
+            if (!userGuess) return; // Tránh trường hợp bấm nút khi chưa nhập gì
 
-    // Hiện thông báo kết quả
-    function showMessage(text, type) {
-        messageEl.textContent = text;
-        messageEl.className = "message " + type;
-    }
+            if (userGuess === currentWord) {
+                // Cộng điểm và báo đúng
+                score += 1;
+                document.getElementById("scoreVal").innerText = score;
+                messageEl.style.color = "#4CAF50";
+                messageEl.innerText = "Tuyệt vời! Thực khách rất ngon miệng! 🎉";
+                
+                // Tự động chuyển món mới sau 2 giây
+                setTimeout(fetchWord, 2000); 
+            } else {
+                // Báo sai
+                messageEl.style.color = "#d32f2f";
+                messageEl.innerText = "Chưa đúng rồi! Bé thử lại nhé. 🧑‍🍳";
+            }
+        }
 
-    // Bật/Tắt các nút bấm khi đang tải dữ liệu
-    function setControlsDisabled(status) {
-        guestInput.disabled = status;
-        serveBtn.disabled = status;
-        skipBtn.disabled = status;
-    }
-</script>
+        // Hỗ trợ bé nhấn phím Enter để trả lời thay vì dùng chuột click
+        document.getElementById("userInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        });
 
+        // Bắt đầu trò chơi khi tải xong trang
+        window.onload = fetchWord;
+    </script>
 </body>
 </html>
